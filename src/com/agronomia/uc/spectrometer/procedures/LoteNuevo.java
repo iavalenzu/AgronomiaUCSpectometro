@@ -82,7 +82,8 @@ public class LoteNuevo extends Procedure {
 		 * Se obtiene el prodecimiendo encargado de calibrar el blanco y negro
 		 */
 		
-		calibrarLuz = scriptProcedures.findOrAdd(new CalibrarLuz());
+		calibrarLuz = scriptProcedures.findOrAdd(new CalibrarLuz(scriptVariables));
+		calibrarLuz.initialize();
 		
 	}
 	
@@ -102,7 +103,7 @@ public class LoteNuevo extends Procedure {
 		 * Set the display precision
 		 */
 		
-		addInstruction(JazScriptSyntax.setDisplayPrecision(8, 6));
+		//addInstruction(JazScriptSyntax.setDisplayPrecision(8, 6));
 		addInstruction("");
 		
 		/*
@@ -110,12 +111,13 @@ public class LoteNuevo extends Procedure {
 		 */
 
 		
+		/*
 		addInstruction(JazScriptSyntax.display("Setting$Integration$time to$", integrationTime.getName(), "secs"));
 		
 		addInstruction(JazScriptSyntax.pause("2"));
 		addInstruction(JazScriptSyntax.setIntegrationTime(integrationTime.getName()));
 		addInstruction("");
-
+*/
 
 		/**
 		 * Se define el arreglo de coeficientes de los modelos, dado que no se como inicializar arreglos en BASIC
@@ -317,10 +319,10 @@ public class LoteNuevo extends Procedure {
 		addInstruction("ShowMenu(\"Get another?\",\"Exit\")");
 		addInstruction("OnButtonClick(" + gettingSpectrumChoice.getName() + ", 30)");
 		addInstruction("If (" + gettingSpectrumChoice.getName() + " = 0) GOTO TOP");
-		addInstruction("If (" + gettingSpectrumChoice.getName() + " = 1) GOTO EXIT");
+		addInstruction("If (" + gettingSpectrumChoice.getName() + " = 1) GOTO FIN");
 		addInstruction("");
 		
-		addInstruction(JazScriptSyntax.label("EXIT"));
+		addInstruction(JazScriptSyntax.label("FIN"));
 
 		
 		/**
@@ -346,6 +348,9 @@ public class LoteNuevo extends Procedure {
 		 */
 		
 		addInstruction(JazScriptSyntax.closeFile(loggerFile.getName()));
+		
+		
+		addInstruction(JazScriptSyntax.label("EXIT"));
 		
 		
 	}

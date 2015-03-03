@@ -96,6 +96,11 @@ public class JazScriptSyntax {
 		return "END";
 	}
 
+	public static String showGraph(String name) 
+	{
+		return "ShowGraph(" + name + ")";
+	}
+
 	
 	
 }
