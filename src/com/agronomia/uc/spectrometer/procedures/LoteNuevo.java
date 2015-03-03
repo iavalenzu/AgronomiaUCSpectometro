@@ -1,5 +1,8 @@
 package com.agronomia.uc.spectrometer.procedures;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import com.agronomia.uc.spectrometer.JazScriptSyntax;
 import com.agronomia.uc.spectrometer.ModelReader;
 import com.agronomia.uc.spectrometer.ScriptProcedures;
@@ -71,7 +74,9 @@ public class LoteNuevo extends Procedure {
 		 * Se crea la variable que maneja el archivo de logs
 		 */
 		
-		loggerFile = scriptVariables.findOrAdd(new Variable("Logger", Variable.type_file, "logger.txt", Variable.file_type_csv));
+		String fileName = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss'.txt'").format(new Date());
+		
+		loggerFile = scriptVariables.findOrAdd(new Variable("Logger", Variable.type_file, fileName, Variable.file_type_csv));
 		
 		/**
 		 * Se obtiene el prodecimiendo encargado de calibrar el blanco y negro

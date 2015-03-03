@@ -55,7 +55,7 @@ public class Variable {
 	{
 		if(this.type.equals(type_file))
 		{
-			return this.name + " " + this.type + " " + this.fileName + " " + this.fileType; 
+			return this.name + " " + this.type + " \"" + this.fileName + "\" " + this.fileType; 
 		}
 		else
 		{
