@@ -66,7 +66,7 @@ public class Variable {
 	
 	public boolean equals(Variable variable)
 	{
-		return this.name.compareToIgnoreCase(variable.name) == 0;
+		return this.name.compareToIgnoreCase(variable.getName()) == 0;
 	}
 
 	public String setValueInstruction(String value) {

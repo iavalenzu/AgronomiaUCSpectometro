@@ -26,6 +26,8 @@ public class JazScript extends Script{
 	
 	public JazScript(String scriptName, String scriptVersion, Logger logger)
 	{
+		super();
+		
 		this.scriptName = scriptName;
 		this.scriptVersion = scriptVersion;
 		
@@ -44,6 +46,7 @@ public class JazScript extends Script{
 		while(variables.hasNext())
 		{
 			Variable variable = variables.next();
+			System.out.println(variable.getName());
 			addInstruction(variable.getInitInstruction());
 		}
 		
@@ -110,15 +113,14 @@ public class JazScript extends Script{
 	{
 		logger.log("Inicializando el Script...");
 		
-		LoteNuevoProcedure = new LoteNuevo(scriptVariables, scriptProcedures, modelReaders);
+		
+		LoteNuevoProcedure = scriptProcedures.findOrAdd(new LoteNuevo(scriptVariables, scriptProcedures, modelReaders));
 		LoteNuevoProcedure.initialize();
-		
-		addProcedure(LoteNuevoProcedure);
 
-		CrearModeloProcedure = new Procedure("HacerCrearModelo");
-		addProcedure(CrearModeloProcedure);
+		CrearModeloProcedure = scriptProcedures.findOrAdd(new Procedure("HacerCrearModelo"));
+		CrearModeloProcedure.initialize();
 		
-		MainMenu = new MainMenu(scriptVariables, scriptConstants);
+		MainMenu = scriptProcedures.findOrAdd(new MainMenu(scriptVariables, scriptConstants));
 		MainMenu.initialize();
 
 		HashMap<String, Procedure> options = new HashMap<String, Procedure>();
@@ -131,7 +133,6 @@ public class JazScript extends Script{
 		
 		((MainMenu) MainMenu).setOptions(options);		
 		
-		addProcedure(MainMenu);
 				
 		
 	}

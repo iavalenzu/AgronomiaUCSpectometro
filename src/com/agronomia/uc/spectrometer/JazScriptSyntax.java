@@ -101,6 +101,28 @@ public class JazScriptSyntax {
 		return "ShowGraph(" + name + ")";
 	}
 
+	public static String setLampIntensity(String l, String m, String v) 
+	{
+		return "SetLampIntensity(" + l + "," + m + "," + v + ")";
+	}
+
+	public static String locateWavelength(String a, String b, String c) {
+		return "LocateWavelength(" + a + ", " + b + ", " + c + ")";
+
+	}
+
+	public static String gotos(String label) {
+		return "GOTO " +  label;
+	}
+
+	public static String onButtonClick(String ButtonSelection, String TimeToWait) {
+		return "OnButtonClick(" + ButtonSelection + ", " + TimeToWait + ")";
+	}
+
+	public static String setLampShutter(String l, String v) {
+		return "SetLampShutter(" + l + ", " + v + ")";
+	}
+
 	
 	
 }

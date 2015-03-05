@@ -82,7 +82,7 @@ public class LoteNuevo extends Procedure {
 		 * Se obtiene el prodecimiendo encargado de calibrar el blanco y negro
 		 */
 		
-		calibrarLuz = scriptProcedures.findOrAdd(new CalibrarLuz(scriptVariables));
+		calibrarLuz = scriptProcedures.findOrAdd(new Calibrar(scriptVariables, scriptProcedures));
 		calibrarLuz.initialize();
 		
 	}
@@ -240,6 +240,7 @@ public class LoteNuevo extends Procedure {
 		 * Se deja solo el primer decimal
 		 */
 		
+		/*
 		addInstruction(JazScriptSyntax.comment("Se deja solo el primer decimal"));
 		
 		for(int i=0; i<modelReaders.length; ++i)
@@ -248,7 +249,8 @@ public class LoteNuevo extends Procedure {
 		}
 
 		addInstruction("");
-
+		*/
+		
 		/**
 		 * Se calcula la suma acumulada del valor que se obtiene antes
 		 */

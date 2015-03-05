@@ -7,33 +7,56 @@ import com.agronomia.uc.spectrometer.variables.Variable;
 
 public class ScriptVariables {
 	
-	ArrayList<Variable> variables = new ArrayList<Variable>();
+	ArrayList<Variable> variables;
 
 	public ScriptVariables()
 	{
+		variables = new ArrayList<Variable>();
 	}
 	
-	public void add(Variable variable)
-	{
-		if(variables.lastIndexOf(variable) > 0){
-			throw new RuntimeException("El nombre de variable '" + variable.getName() + "' ya se encuentra definido.");
+	public String toString(){
+		
+		String out = "";
+		
+		for(int i=0; i<variables.size(); i++){
+			Variable variable = (Variable) variables.get(i);
+			
+			out += variable.getName() + ", ";
 		}
 		
-		variables.add(variable);
+		return out;
+	}
+	
+	public int indexOf(Variable v)
+	{
+		for(int i=0; i<variables.size(); i++)
+		{
+			Variable variable = (Variable) variables.get(i);
+			
+			if(variable.equals(v)){
+				return i;
+			}
+		
+		}
+
+		return -1;
 		
 	}
+	
 	
 	public Variable findOrAdd(Variable variable)
 	{
-		int index = variables.lastIndexOf(variable);
-		
-		if(index > 0){
+		int index = indexOf(variable);
+
+		if(index >= 0)
+		{
 			return variables.get(index);
 		}
-		
-		variables.add(variable);
-		
-		return variable;
+		else
+		{
+			variables.add(variable);
+			return variable;
+		}
 	}
 	
 	public Iterator<Variable> getIterator()

@@ -27,20 +27,6 @@ public class Script {
 		scriptBody.append(line + "\n");
 	}	
 	
-	public void addVariable(Variable variable)
-	{
-		scriptVariables.add(variable);
-	}
-	
-	public void addConstant(Constant constant)
-	{
-		scriptConstants.add(constant);
-	}	
-	
-	public void addProcedure(Procedure procedure)
-	{
-		scriptProcedures.addProcedure(procedure);
-	}		
 	
 	public String getCode()
 	{

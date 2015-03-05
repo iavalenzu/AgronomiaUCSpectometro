@@ -4,37 +4,46 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import com.agronomia.uc.spectrometer.constants.Constant;
+import com.agronomia.uc.spectrometer.variables.Variable;
 
 public class ScriptConstants {
 	
-	ArrayList<Constant> constants = new ArrayList<Constant>();
+	ArrayList<Constant> constants;
 
 	public ScriptConstants()
 	{
+		constants = new ArrayList<Constant>();
 	}
 	
-	public void add(Constant constant)
+	public int indexOf(Constant c)
 	{
-		if(constants.lastIndexOf(constant) > 0)
+		for(int i=0; i<constants.size(); i++)
 		{
-			throw new RuntimeException("El nombre de constante '" + constant.getName() + "' ya se encuentra definido.");
+			Constant constant = (Constant) constants.get(i);
+			
+			if(constant.equals(c)){
+				return i;
+			}
+		
 		}
+
+		return -1;
 		
-		constants.add(constant);
-		
-	}
+	}	
 	
 	public Constant findOrAdd(Constant constant)
 	{
-		int index = constants.lastIndexOf(constant);
+		int index = indexOf(constant);
 		
-		if(index > 0){
+		if(index >= 0)
+		{
 			return constants.get(index);
 		}
-		
-		constants.add(constant);
-		
-		return constant;
+		else
+		{
+			constants.add(constant);
+			return constant;
+		}
 	}	
 	
 	public Iterator<Constant> getIterator()
