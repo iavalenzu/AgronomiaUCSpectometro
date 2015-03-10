@@ -203,8 +203,11 @@ public class LoteNuevo extends Procedure {
 		 */
 		
 		addInstruction(JazScriptSyntax.displayMsg("Collecting$Spectrum"));
-		addInstruction(JazScriptSyntax.pause("2"));
+		addInstruction(JazScriptSyntax.pause("1"));
 		addInstruction(JazScriptSyntax.getSpectrum(spectrumChannel.getName(), collectedSpectrum.getName()));
+		addInstruction(JazScriptSyntax.pause("2"));
+		addInstruction(JazScriptSyntax.showGraph(collectedSpectrum.getName()));
+		addInstruction(JazScriptSyntax.pause("3"));
 		addInstruction("");
 
 		/**
