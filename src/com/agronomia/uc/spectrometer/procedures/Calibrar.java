@@ -46,7 +46,7 @@ public class Calibrar extends Procedure{
 		getTheLowRef = scriptProcedures.findOrAdd(new GetTheLowRef());
 		getTheLowRef.initialize();
 		
-		getTheMaxRef = scriptProcedures.findOrAdd(new GetTheMaxRef());
+		getTheMaxRef = scriptProcedures.findOrAdd(new GetTheMaxRef(scriptVariables, scriptProcedures));
 		getTheMaxRef.initialize();
 	}	
 
@@ -81,31 +81,25 @@ public class Calibrar extends Procedure{
 
 		addInstruction(JazScriptSyntax.displayMsg("Light adjustment$complete"));
 		addInstruction(JazScriptSyntax.pause("2"));
-		addInstruction(JazScriptSyntax.display("Max Int = ", collectedSpectrum.getName() + "[" + lightPeak.getName() + "]", ""));
+		addInstruction(JazScriptSyntax.display("Max Int: $", collectedSpectrum.getName() + "[" + lightPeak.getName() + "]", ""));
 		addInstruction(JazScriptSyntax.pause("2"));
 		
 		
 		addInstruction(JazScriptSyntax.label("TOP"));
-		addInstruction(JazScriptSyntax.showMenu("Take Dark Ref", "Take Low Ref", "Take Max Ref", "Continuar"));
+		addInstruction(JazScriptSyntax.showMenu("Take Dark Ref", "Take High Ref", "Continuar"));
 		addInstruction(JazScriptSyntax.onButtonClick(userChoice.getName(), "30"));
 		
-		addInstruction("If(UserSelection = 0) GOTO Dark");
-		addInstruction("If(UserSelection = 1) GOTO Low");
-		addInstruction("If(UserSelection = 2) GOTO Max");
-		addInstruction("If(UserSelection = 3) GOTO EXIT");
+		addInstruction("If(" + userChoice.getName() + " = 0) GOTO Dark");
+		addInstruction("If(" + userChoice.getName() + " = 1) GOTO High");
+		addInstruction("If(" + userChoice.getName() + " = 2) GOTO EXIT");
 		addInstruction("");
 
 		addInstruction(JazScriptSyntax.label("Dark"));
 		addInstruction(JazScriptSyntax.call(getTheDarkRef.getName()));
 		addInstruction(JazScriptSyntax.gotos("TOP"));
 		addInstruction("");
-
-		addInstruction(JazScriptSyntax.label("Low"));
-		addInstruction(JazScriptSyntax.call(getTheLowRef.getName()));
-		addInstruction(JazScriptSyntax.gotos("TOP"));
-		addInstruction("");
-		
-		addInstruction(JazScriptSyntax.label("Max"));
+	
+		addInstruction(JazScriptSyntax.label("High"));
 		addInstruction(JazScriptSyntax.call(getTheMaxRef.getName()));
 		addInstruction(JazScriptSyntax.gotos("TOP"));
 		addInstruction("");

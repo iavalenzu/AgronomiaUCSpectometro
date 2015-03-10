@@ -53,10 +53,12 @@ public class JazScriptSyntax {
 	{
 		String out = "ShowMenu(";
 		
-		for(int i=0; i<options.length; i++)
+		for(int i=0; i<options.length - 1; i++)
 		{
-			out += "\"" + options[i] + "\"";
+			out += "\"" + options[i] + "\",";
 		}
+
+		out += "\"" + options[options.length - 1] + "\"";
 		
 		out += ")";
 		

@@ -288,7 +288,7 @@ public class LoteNuevo extends Procedure {
 			addInstruction(JazScriptSyntax.comment("Se muestra el valor obtenido de aplicar el espectro"));
 			
 			addInstruction(JazScriptSyntax.display(SumAcumModel[i].getName() + ":$", SumAcumModel[i].getName(), model.getUnitName()));
-			addInstruction(JazScriptSyntax.saveReading(loggerFile.getName(), SumAcumModel[i].getName() + ":$", SumAcumModel[i].getName(), model.getUnitName()));
+			addInstruction(JazScriptSyntax.saveReading(loggerFile.getName(), SumAcumModel[i].getName() + ":", SumAcumModel[i].getName(), model.getUnitName()));
 			addInstruction(JazScriptSyntax.pause("3"));
 			addInstruction("");
 			
@@ -331,7 +331,7 @@ public class LoteNuevo extends Procedure {
 		 * Se guarda el numero de mediciones
 		 */
 
-		addInstruction(JazScriptSyntax.saveReading(loggerFile.getName(), numMediciones.getName() + ":$", numMediciones.getName(), ""));
+		addInstruction(JazScriptSyntax.saveReading(loggerFile.getName(), numMediciones.getName() + ":", numMediciones.getName(), ""));
 		
 		/**
 		 * Se guardan los promedios de las medidas realizadas
@@ -341,7 +341,7 @@ public class LoteNuevo extends Procedure {
 		{
 			ModelReader model = modelReaders[i];
 
-			addInstruction(JazScriptSyntax.saveReading(loggerFile.getName(), AvgAcumModel[i].getName() + ":$", AvgAcumModel[i].getName(), model.getUnitName()));
+			addInstruction(JazScriptSyntax.saveReading(loggerFile.getName(), AvgAcumModel[i].getName() + ":", AvgAcumModel[i].getName(), model.getUnitName()));
 			
 		}		
 
