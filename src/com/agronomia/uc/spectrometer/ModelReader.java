@@ -21,6 +21,8 @@ public class ModelReader {
 	String variableName;
 	String unitName;
 	
+	int truncateIni;
+	
 	public ModelReader(String filePath) throws FileNotFoundException, IOException
 	{
 		Path modelPath = Paths.get(filePath);
@@ -29,21 +31,9 @@ public class ModelReader {
 		
 		matfilereader = new MatFileReader(modelPath.toString());
 
-		parseModelName();
+		truncateIni = 0;
+		
 		findModelCoefficients();
-	}
-	
-	public void parseModelName()
-	{
-		String[]parts = modelName.substring(0, modelName.lastIndexOf('.')) .split("_");
-		
-		if(parts.length < 2){
-			throw new IllegalStateException("El nombrde del modelo debe tener el formato VARIABLENAME_UNITS");
-		}
-
-		this.variableName = parts[0];
-		this.unitName = parts[1];
-		
 	}
 	
 	
@@ -78,6 +68,9 @@ public class ModelReader {
 	
 	public void truncateCoefficients(int ini, int length)
 	{
+		this.truncateIni = ini;
+		
+		
 		if(length > coefficients.length)
 		{
 			System.out.println("El largo dado: " + length + ", no puede ser mayor que el largo del arreglo de coeficientes: " + coefficients.length);
@@ -106,6 +99,21 @@ public class ModelReader {
 	public String getUnitName() {
 		return unitName;
 	}
+
+
+	public void setVariableName(String variableName) {
+		this.variableName = variableName;
+	}
+
+
+	public void setUnitName(String unitName) {
+		this.unitName = unitName;
+	}
+	
+	public int getTruncateIni(){
+		return this.truncateIni;
+	}
+	
 	
 	
 

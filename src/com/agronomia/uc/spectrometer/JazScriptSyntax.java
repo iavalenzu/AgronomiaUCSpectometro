@@ -125,6 +125,20 @@ public class JazScriptSyntax {
 		return "SetLampShutter(" + l + ", " + v + ")";
 	}
 
+	public static String writeSpectrum(String file, String spectrum) {
+		return "WriteSpectrum(" + file + ", " + spectrum + ")";
+
+	}
+
+	public static String writeFile(String file, String text) {
+		return "WriteFile(" + file + ",\"" + text + "\")";
+
+	}
+
+	public static String decrement(String variableName, String variableValue) {
+		return JazScriptSyntax.assigment(variableName, variableName + " - " + variableValue);
+	}
+
 	
 	
 }

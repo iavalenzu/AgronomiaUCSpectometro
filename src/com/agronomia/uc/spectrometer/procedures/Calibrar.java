@@ -19,7 +19,6 @@ public class Calibrar extends Procedure{
 	Variable userChoice;
 	
 	Procedure getTheDarkRef; 
-	Procedure getTheLowRef;
 	Procedure getTheMaxRef;
 	
 	public Calibrar(ScriptVariables _scriptVariables, ScriptProcedures _scriptProcedures)
@@ -42,9 +41,6 @@ public class Calibrar extends Procedure{
 		
 		getTheDarkRef = scriptProcedures.findOrAdd(new GetTheDarkRef(scriptVariables, scriptProcedures));
 		getTheDarkRef.initialize();
-		
-		getTheLowRef = scriptProcedures.findOrAdd(new GetTheLowRef());
-		getTheLowRef.initialize();
 		
 		getTheMaxRef = scriptProcedures.findOrAdd(new GetTheMaxRef(scriptVariables, scriptProcedures));
 		getTheMaxRef.initialize();
@@ -84,9 +80,8 @@ public class Calibrar extends Procedure{
 		addInstruction(JazScriptSyntax.display("Max Int: $", collectedSpectrum.getName() + "[" + lightPeak.getName() + "]", ""));
 		addInstruction(JazScriptSyntax.pause("2"));
 		
-		
 		addInstruction(JazScriptSyntax.label("TOP"));
-		addInstruction(JazScriptSyntax.showMenu("Take Dark Ref", "Take High Ref", "Continuar"));
+		addInstruction(JazScriptSyntax.showMenu("Medir Negro", "Medir Blanco", "Iniciar Medicion?"));
 		addInstruction(JazScriptSyntax.onButtonClick(userChoice.getName(), "30"));
 		
 		addInstruction("If(" + userChoice.getName() + " = 0) GOTO Dark");

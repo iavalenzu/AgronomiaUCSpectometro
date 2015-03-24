@@ -28,6 +28,8 @@ public class LoteNuevo extends Procedure {
 	Variable gettingSpectrumChoice;
 	Variable index;
 	Variable numMediciones;
+	Variable tmpIndex;
+	Variable spectrumFiles;
 	
 	Variable loggerFile;
 	
@@ -48,6 +50,10 @@ public class LoteNuevo extends Procedure {
 		collectedSpectrum = scriptVariables.findOrAdd(new Variable("CollectedSpectrum", Variable.type_spectral));
 
 		gettingSpectrumChoice = scriptVariables.findOrAdd(new Variable("GettingSpectrumChoice", Variable.type_int_16)); 
+		
+		tmpIndex = scriptVariables.findOrAdd(new Variable("TmpIndex", Variable.type_int_16)); 
+		
+		spectrumFiles = scriptVariables.findOrAdd(new Variable("Spectrums", Variable.type_file, "Spectrums.txt", Variable.file_type_csv)); 
 		
 		CoeffModel = new Variable[modelReaders.length];
 		SumAcumModel = new Variable[modelReaders.length]; 
@@ -76,7 +82,7 @@ public class LoteNuevo extends Procedure {
 		
 		String fileName = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss'.txt'").format(new Date());
 		
-		loggerFile = scriptVariables.findOrAdd(new Variable("Logger", Variable.type_file, fileName, Variable.file_type_csv));
+		loggerFile = scriptVariables.findOrAdd(new Variable("Logger", Variable.type_file, "Results.txt", Variable.file_type_ascii));
 		
 		/**
 		 * Se obtiene el prodecimiendo encargado de calibrar el blanco y negro
@@ -132,7 +138,7 @@ public class LoteNuevo extends Procedure {
 			
 			for(int j=0; j<coefficients.length; j++)
 			{
-				addInstruction(JazScriptSyntax.assigment(CoeffModel[i].getName() + "[" + j + "]", "" + coefficients[j]));
+				addInstruction(JazScriptSyntax.assigment(CoeffModel[i].getName() + "[" + j + "]", "" + coefficients[j] ));
 			}
 
 			addInstruction("");
@@ -205,10 +211,18 @@ public class LoteNuevo extends Procedure {
 		addInstruction(JazScriptSyntax.displayMsg("Collecting$Spectrum"));
 		addInstruction(JazScriptSyntax.pause("1"));
 		addInstruction(JazScriptSyntax.getSpectrum(spectrumChannel.getName(), collectedSpectrum.getName()));
-		addInstruction(JazScriptSyntax.pause("2"));
+		addInstruction(JazScriptSyntax.pause("1"));
 		addInstruction(JazScriptSyntax.showGraph(collectedSpectrum.getName()));
-		addInstruction(JazScriptSyntax.pause("3"));
+		addInstruction(JazScriptSyntax.pause("1"));
 		addInstruction("");
+		
+		addInstruction(JazScriptSyntax.openFile(spectrumFiles.getName(), "ForWrite", numMediciones.getName()));
+		addInstruction(JazScriptSyntax.writeSpectrum(spectrumFiles.getName(), collectedSpectrum.getName()));
+		
+		
+		addInstruction(JazScriptSyntax.closeFile(spectrumFiles.getName()));
+		
+		
 
 		/**
 		 * Se generan las variables que guardan el resultado de aplicar los modelos sobre el espectro
@@ -221,6 +235,7 @@ public class LoteNuevo extends Procedure {
 			addInstruction(JazScriptSyntax.assigment(SumAcumModel[i].getName(), "0"));
 		}
 		
+		
 		addInstruction("");
 
 		/**
@@ -229,31 +244,20 @@ public class LoteNuevo extends Procedure {
 		
 		addInstruction(JazScriptSyntax.comment("Se recorre el spectro y se calcula la suma acumulada"));
 		
-		addInstruction("DO " + index.getName() + " 0, 2048, 1");
 		
 		for(int i=0; i<modelReaders.length; ++i)
 		{
-			addInstruction(JazScriptSyntax.increment(SumAcumModel[i].getName(), "(" + collectedSpectrum.getName() + "[" + index.getName() + "] * " + CoeffModel[i].getName() + "[" + index.getName() + "])"));
+			ModelReader modelReader = modelReaders[i];
+			addInstruction(JazScriptSyntax.assigment(tmpIndex.getName(), "0"));
+			addInstruction("DO " + index.getName() + " 0, " + modelReader.getLength() + ", 1");
+			addInstruction(JazScriptSyntax.assigment(tmpIndex.getName(), index.getName() + " + " + modelReader.getTruncateIni()));
+			addInstruction(JazScriptSyntax.increment(SumAcumModel[i].getName(), "(" + collectedSpectrum.getName() + "[" + tmpIndex.getName() + "] * " + CoeffModel[i].getName() + "[" + index.getName() + "])"));
+			addInstruction("DONE");
+			addInstruction("");
 		}
 		
-		addInstruction("DONE");
 		addInstruction("");
 
-		/**
-		 * Se deja solo el primer decimal
-		 */
-		
-		/*
-		addInstruction(JazScriptSyntax.comment("Se deja solo el primer decimal"));
-		
-		for(int i=0; i<modelReaders.length; ++i)
-		{
-			addInstruction(JazScriptSyntax.assigment(SumAcumModel[i].getName(), "(" + SumAcumModel[i].getName() + " * 10 )/10.0"));
-		}
-
-		addInstruction("");
-		*/
-		
 		/**
 		 * Se calcula la suma acumulada del valor que se obtiene antes
 		 */
@@ -281,8 +285,11 @@ public class LoteNuevo extends Procedure {
 
 		addInstruction(JazScriptSyntax.comment("Se muestra el numero de medicion"));
 		addInstruction(JazScriptSyntax.display("Medicion:$", numMediciones.getName(), ""));
-		addInstruction(JazScriptSyntax.pause("3"));
+		addInstruction(JazScriptSyntax.pause("1"));
 		addInstruction("");
+		
+		addInstruction(JazScriptSyntax.saveReading(loggerFile.getName(), "Medicion: ", numMediciones.getName(), ""));
+		
 		
 		for(int i=0; i<modelReaders.length; ++i)
 		{
@@ -292,14 +299,17 @@ public class LoteNuevo extends Procedure {
 			
 			addInstruction(JazScriptSyntax.display(SumAcumModel[i].getName() + ":$", SumAcumModel[i].getName(), model.getUnitName()));
 			addInstruction(JazScriptSyntax.saveReading(loggerFile.getName(), SumAcumModel[i].getName() + ":", SumAcumModel[i].getName(), model.getUnitName()));
-			addInstruction(JazScriptSyntax.pause("3"));
+			addInstruction(JazScriptSyntax.pause("1"));
 			addInstruction("");
 			
 			addInstruction(JazScriptSyntax.comment("Se muestra el promedio"));
 			addInstruction(JazScriptSyntax.display(AvgAcumModel[i].getName() + ":$", AvgAcumModel[i].getName(), model.getUnitName()));
-			addInstruction(JazScriptSyntax.pause("3"));
+			addInstruction(JazScriptSyntax.pause("1"));
 			
 		}
+
+		addInstruction(JazScriptSyntax.writeFile(loggerFile.getName(), "========================="));
+		
 		
 		addInstruction("");
 		
@@ -334,6 +344,11 @@ public class LoteNuevo extends Procedure {
 		 * Se guarda el numero de mediciones
 		 */
 
+		addInstruction(JazScriptSyntax.writeFile(loggerFile.getName(), "========================="));
+		addInstruction(JazScriptSyntax.writeFile(loggerFile.getName(), "========================="));
+
+		addInstruction(JazScriptSyntax.decrement(numMediciones.getName(), "1"));
+		
 		addInstruction(JazScriptSyntax.saveReading(loggerFile.getName(), numMediciones.getName() + ":", numMediciones.getName(), ""));
 		
 		/**

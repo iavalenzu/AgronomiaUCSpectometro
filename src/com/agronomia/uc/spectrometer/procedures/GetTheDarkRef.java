@@ -11,8 +11,10 @@ public class GetTheDarkRef extends Procedure {
 	ScriptProcedures scriptProcedures;
 	
 	Variable spectrumChannel;
-	Variable collectedSpectrum;
+	Variable darkCollectedSpectrum;
 	Variable light1;
+	
+	Variable darkReferenceFile;
 
 	public GetTheDarkRef(ScriptVariables scriptVariables, ScriptProcedures scriptProcedures) {
 		super("GetTheDarkRef");
@@ -21,9 +23,10 @@ public class GetTheDarkRef extends Procedure {
 		this.scriptVariables = scriptVariables;
 		
 		spectrumChannel = scriptVariables.findOrAdd(new Variable("SpectrumChannel", Variable.type_int_16));
-		collectedSpectrum = scriptVariables.findOrAdd(new Variable("CollectedSpectrum", Variable.type_spectral));
+		darkCollectedSpectrum = scriptVariables.findOrAdd(new Variable("DarkCollectedSpectrum", Variable.type_spectral));
 		light1 = scriptVariables.findOrAdd(new Variable("Light1", Variable.type_int_32));
 			
+		darkReferenceFile = scriptVariables.findOrAdd(new Variable("DarkReferenceFile", Variable.type_file, "EspectroNegro.txt", Variable.file_type_csv));
 		
 	}
 	
@@ -34,11 +37,16 @@ public class GetTheDarkRef extends Procedure {
 		addInstruction(JazScriptSyntax.setLampIntensity("0", "ALLBULBS", "0"));
 		addInstruction(JazScriptSyntax.setLampShutter("0", "0"));
 		addInstruction(JazScriptSyntax.pause("1"));
-		addInstruction(JazScriptSyntax.getSpectrum(spectrumChannel.getName(), collectedSpectrum.getName()));
+		addInstruction(JazScriptSyntax.getSpectrum(spectrumChannel.getName(), darkCollectedSpectrum.getName()));
 		addInstruction(JazScriptSyntax.displayMsg("Taking Dark$Reference"));
 		addInstruction(JazScriptSyntax.pause("2"));
-		addInstruction(JazScriptSyntax.showGraph(collectedSpectrum.getName()));
-		addInstruction(JazScriptSyntax.pause("4"));
+		addInstruction(JazScriptSyntax.showGraph(darkCollectedSpectrum.getName()));
+		
+		addInstruction(JazScriptSyntax.openFile(darkReferenceFile.getName(), "ForWrite", ""));
+		addInstruction(JazScriptSyntax.writeSpectrum(darkReferenceFile.getName(), darkCollectedSpectrum.getName()));
+		addInstruction(JazScriptSyntax.closeFile(darkReferenceFile.getName()));
+		
+		addInstruction(JazScriptSyntax.pause("2"));
 		
 		addInstruction(JazScriptSyntax.setLampShutter("0", "1"));
 		addInstruction(JazScriptSyntax.setLampIntensity("0", "ALLBULBS", light1.getName()));

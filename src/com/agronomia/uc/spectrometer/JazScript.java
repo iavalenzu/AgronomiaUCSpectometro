@@ -99,6 +99,9 @@ public class JazScript extends Script{
 		logger.log("Añadiendo el bloque MainProgram...");
 
 		addInstruction("START");
+		
+		//addInstruction(JazScriptSyntax.setDisplayPrecision(6, 3));
+		
 		addInstruction(JazScriptSyntax.displayMsg(this.scriptName + " " + this.scriptVersion));
 		addInstruction(JazScriptSyntax.pause("2"));		
 		addInstruction(JazScriptSyntax.call(MainMenu.getName()));
@@ -117,15 +120,11 @@ public class JazScript extends Script{
 		LoteNuevoProcedure = scriptProcedures.findOrAdd(new LoteNuevo(scriptVariables, scriptProcedures, modelReaders));
 		LoteNuevoProcedure.initialize();
 
-		CrearModeloProcedure = scriptProcedures.findOrAdd(new Procedure("HacerCrearModelo"));
-		CrearModeloProcedure.initialize();
-		
 		MainMenu = scriptProcedures.findOrAdd(new MainMenu(scriptVariables, scriptConstants));
 		MainMenu.initialize();
 
 		HashMap<String, Procedure> options = new HashMap<String, Procedure>();
 		options.put("Lote nuevo", LoteNuevoProcedure);
-		options.put("Crear Modelo", CrearModeloProcedure);
 		
 		/**
 		 * Se agregan las opciones al menu, cada opcion corresponde a un procedimiento

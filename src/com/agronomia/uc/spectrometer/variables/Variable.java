@@ -14,6 +14,7 @@ public class Variable {
 	static public String file_type_asc = "ASC";
 	static public String file_type_csv = "CSV";
 	static public String file_type_raw = "RAW"; 
+	static public String file_type_ascii = "ASCII";
 	
 	String name;
 	String type;
