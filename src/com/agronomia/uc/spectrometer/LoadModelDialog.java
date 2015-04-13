@@ -62,22 +62,52 @@ public class LoadModelDialog extends JDialog implements ActionListener {
       		  
       		try {
       			
-          		readers = new ModelReader[3];
+      			int totalAvailableModel = 0;
+      			
+      			if(loadPanelModel1.isAvailable()){
+      				totalAvailableModel++;
+      			}
+
+      			if(loadPanelModel2.isAvailable()){
+      				totalAvailableModel++;
+      			}
+      			
+      			if(loadPanelModel3.isAvailable()){
+      				totalAvailableModel++;
+      			}
+
+      			if(totalAvailableModel == 0){
+      				
+      				JOptionPane.showMessageDialog(null, "Debes ingresar el nombre de variable, el nombre de la unidad y seleccionar el archivo de al menos un modelo.", "Alert", JOptionPane.ERROR_MESSAGE);      				
+      				return;
+      			}
+      			
+      			
+          		readers = new ModelReader[totalAvailableModel];
           		
-				readers[0] = new ModelReader(loadPanelModel1.getModelFilePath());
-				readers[0].setUnitName(loadPanelModel1.getUnitsName());
-				readers[0].setVariableName(loadPanelModel1.getVariableName());
-				readers[0].truncateCoefficients(loadPanelModel1.getIniIndex(), loadPanelModel1.getModelLength());
-
-				readers[1] = new ModelReader(loadPanelModel2.getModelFilePath());
-				readers[1].setUnitName(loadPanelModel2.getUnitsName());
-				readers[1].setVariableName(loadPanelModel2.getVariableName());
-				readers[1].truncateCoefficients(loadPanelModel2.getIniIndex(), loadPanelModel2.getModelLength());
-
-				readers[2] = new ModelReader(loadPanelModel3.getModelFilePath());
-				readers[2].setUnitName(loadPanelModel3.getUnitsName());
-				readers[2].setVariableName(loadPanelModel3.getVariableName());
-				readers[2].truncateCoefficients(loadPanelModel3.getIniIndex(), loadPanelModel3.getModelLength());
+      			if(loadPanelModel1.isAvailable())
+      			{
+					readers[0] = new ModelReader(loadPanelModel1.getModelFilePath());
+					readers[0].setUnitName(loadPanelModel1.getUnitsName());
+					readers[0].setVariableName(loadPanelModel1.getVariableName());
+					readers[0].truncateCoefficients(loadPanelModel1.getIniIndex(), loadPanelModel1.getModelLength());
+      			}
+      			
+      			if(loadPanelModel2.isAvailable())
+      			{
+					readers[1] = new ModelReader(loadPanelModel2.getModelFilePath());
+					readers[1].setUnitName(loadPanelModel2.getUnitsName());
+					readers[1].setVariableName(loadPanelModel2.getVariableName());
+					readers[1].truncateCoefficients(loadPanelModel2.getIniIndex(), loadPanelModel2.getModelLength());
+      			}
+      			
+      			if(loadPanelModel3.isAvailable())
+      			{
+					readers[2] = new ModelReader(loadPanelModel3.getModelFilePath());
+					readers[2].setUnitName(loadPanelModel3.getUnitsName());
+					readers[2].setVariableName(loadPanelModel3.getVariableName());
+					readers[2].truncateCoefficients(loadPanelModel3.getIniIndex(), loadPanelModel3.getModelLength());
+      			}
 				
 				
       		} catch (IOException e) {

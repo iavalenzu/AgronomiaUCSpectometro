@@ -129,4 +129,12 @@ public class LoadModelRow extends JPanel {
 		return getEndIndex() - getIniIndex();
 	}
 	
+	public boolean isAvailable()
+	{
+		return !fileNameLabel1.getText().trim().isEmpty() && 
+				!variableNameTextField1.getText().trim().isEmpty() &&
+				!unitsTextField1.getText().trim().isEmpty();
+	}
+	
+	
 }
