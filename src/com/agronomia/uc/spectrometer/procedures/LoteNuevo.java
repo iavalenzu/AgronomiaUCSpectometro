@@ -138,6 +138,9 @@ public class LoteNuevo extends Procedure {
 			
 			for(int j=0; j<coefficients.length; j++)
 			{
+				
+				System.out.println( (int)(coefficients[j]*100000)/100000.0);
+				
 				addInstruction(JazScriptSyntax.assigment(CoeffModel[i].getName() + "[" + j + "]", "" + coefficients[j] ));
 			}
 

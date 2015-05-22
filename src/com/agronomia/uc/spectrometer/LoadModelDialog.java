@@ -111,7 +111,8 @@ public class LoadModelDialog extends JDialog implements ActionListener {
 				
 				
       		} catch (IOException e) {
-				// TODO Auto-generated catch block
+
+      			JOptionPane.showMessageDialog(LoadModelDialog.this, "No puedo leer el modelo, verifica que el tipo de modelo sea correcto. Solo puedo leer modelos Matlab 5.");      			
 				e.printStackTrace();
 			}
       		  
